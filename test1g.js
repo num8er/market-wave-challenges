@@ -1,3 +1,5 @@
+var Table = require('cli-table');
+
 var lines = [];
 
 process.stdin.resume();
@@ -14,7 +16,9 @@ process.stdin.on('data', function (data) {
 });
 
 process.stdin.on('end', function () {
+  console.log("\n");
   run();
+  console.log("\n");
 });
 
 
@@ -64,10 +68,31 @@ function placePoints() {
   }
 }
 
+function drawShapes() {
+  var areaShape = new Table();
+
+  for(var y = 0; y < areaSize.y; y++) {
+    areaShape.push(Area[y]);
+  }
+
+  console.log("\nAREA");
+  console.log(areaShape.toString());
+
+  var rectShape = new Table();
+
+  for(var y = 0; y < rectSize.y; y++) {
+    rectShape.push(Rect[y]);
+  }
+
+  console.log("\nRECT");
+  console.log(rectShape.toString());
+}
+
 function init() {
   makeArea();
   makeRect();
   placePoints();
+  drawShapes();
 }
 
 var placements = [];
@@ -102,8 +127,21 @@ function findOptimalPlacement() {
     }
   });
 
-  console.log(areaSize.x +' '+ areaSize.y +', '+ rectSize.x +' '+ rectSize.y);
-  console.log(optimalPlacement.x +' '+ optimalPlacement.y +', '+ optimalPlacement.points.length);
+  console.log("\nOPTIMAL PLACE");
+  console.log(optimalPlacement);
+  drawOptimalPlacement(optimalPlacement);
+}
+
+function drawOptimalPlacement(placement) {
+  placement.points.forEach(function(point) {
+    Rect[point.y - placement.y][point.x - placement.x] = 'x';
+  });
+
+  var rectShape = new Table();
+  for(var y = 0; y < rectSize.y; y++) {
+    rectShape.push(Rect[y]);
+  }
+  console.log(rectShape.toString());
 }
 
 function run() {
