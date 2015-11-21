@@ -1,11 +1,17 @@
 var Table = require('cli-table');
-process.stdin.resume();
 
 var lines = [];
-process.stdin.on('data', function (line) {
-  line = line.toString().trim();
-  if(line != '') {
-    lines.push(line);
+
+process.stdin.resume();
+
+process.stdin.on('data', function (data) {
+  data = data.toString().trim();
+  if(data != '') {
+    data = data.split("\n");
+    data.forEach(function(line){
+      line = line.toString().trim();
+      lines.push(line);
+    });
   }
 });
 
