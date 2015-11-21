@@ -14,9 +14,7 @@ process.stdin.on('data', function (data) {
 });
 
 process.stdin.on('end', function () {
-  console.log("\n");
   run();
-  console.log("\n");
 });
 
 var firingRange = 0;
@@ -37,10 +35,36 @@ function getEnemies() {
     };
     enemies.push(enemy);
   }
+
+  // reverse sorting enemies by speed, to fire speediest first
+  enemies.sort(function(a,b){
+    return a.speed - b.speed;
+  });
 }
 
+var turn = 1;
+
 function action() {
-  console.log(enemies);
+  var alive = enemies.length;
+
+  while(alive > 0) {
+    var madeShot = false;
+    var enemyIdx;
+
+    enemies.forEach(function(enemy, idx) {
+      if(turn > 1) enemy.distance -= enemy.speed;
+      if(enemy.distance <= firingRange && !madeShot) {
+        console.log('Turn '+turn+': Kill '+enemy.name+' at '+enemy.distance+'m');
+        madeShot = true;
+        delete enemies[idx];
+        alive--;
+      }
+    });
+
+    turn++;
+  }
+
+  console.log('You win in '+(turn-1)+' turns');
 }
 
 function run() {
