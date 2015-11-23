@@ -82,14 +82,14 @@ function cropRectangle(offsetX, offsetY) {
     }
   }
 
-  var placement = {x: offsetX, y: offsetY, points: points};
-  placements.push(placement);
+  return {x: offsetX, y: offsetY, points: points};
 }
 
 function getPossiblePlacements() {
   for(var y = 0; y < areaSize.y; y++) {
     for(var x = 0; x < areaSize.x; x++) {
-      cropRectangle(x, y);
+      var placement = cropRectangle(x, y);
+      placements.push(placement);
     }
   }
 }
